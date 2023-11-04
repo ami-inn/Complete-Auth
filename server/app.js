@@ -4,6 +4,7 @@ import cors from 'cors';
 import cookiParser from 'cookie-parser'
 import dotenv from 'dotenv'
 import { ErrorMiddleware } from './middleware/error.js';
+import userRouter from './routes/user.route.js';
 dotenv.config()
 
 
@@ -18,6 +19,8 @@ app.get("/test", (req,res, next) => {
       message: "api is working",
     });
   });
+
+  app.use('/api/v1',userRouter)
 
 
 app.all('*',(req, res, next) => {
