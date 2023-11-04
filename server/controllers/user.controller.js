@@ -7,7 +7,7 @@ dotenv.config()
 import { fileURLToPath } from 'url';
 import {dirname} from 'path'
 import path from 'path'
-// import {redis} from '../utils/redis.js'
+import { redis } from "../utils/redis.js";
 import ejs from 'ejs'
 import sendMail from "../utils/sendMail.js";
 
