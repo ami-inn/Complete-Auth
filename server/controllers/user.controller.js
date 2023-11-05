@@ -85,3 +85,51 @@ export const createActivationToken = (user)=>{
 
     return {token,activationCode}
 }
+
+export const activateUser = catchAsyncError(async(req,res,next)=>{
+    try {
+
+        const {activation_token,activation_code} = req.body
+
+        
+
+        console.log(req.body);
+
+        const newUser = jwt.verify(activation_token,process.env.ACTIVATION_SECRET)
+
+        console.log(activation_code,newUser.activationCode);
+
+        console.log('new user',newUser.activationCode === activation_code);
+
+        if(newUser.activationCode !== activation_code){
+            return next(new ErrorHandler('invalid activation code',404))
+        }
+
+        const {name,email,password} = newUser.user
+
+        const existUser = await userModel.findOne({email})
+
+        if(existUser){
+            return next(new ErrorHandler('user already exists',400))
+        }
+
+        console.log('------');
+
+        const user = await userModel.create({
+            name,
+            email,
+            password
+        })
+
+        console.log(user);
+        
+
+        res.status(201).json({
+            success:true,
+        })
+        
+        
+    } catch (error) {
+        return next(new Error(error.message,404));
+    }
+})
